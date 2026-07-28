@@ -12,5 +12,6 @@ router.post(
   auth.register,
 );
 router.post("/login", validation(authValidation.login), auth.login);
-
+router.patch("/update-password", verifyToken, auth.updatePassword);
+router.post("/logout", verifyToken, auth.logout);
 export default router;

@@ -5,7 +5,6 @@ import { userModel } from "../../DB/model/user.model.js";
 export const register = async (req, res, next) => {
   const { userName, email, password, phone, gender } = req.body;
   const hashedpassword = await bcrypt.hash(password, Number(process.env.SALT));
-
   const user = await userModel.create({
     userName,
     email,
@@ -86,5 +85,34 @@ export const login = async (req, res, next) => {
       accessToken,
       refreshToken,
     },
+  });
+};
+
+export const updatePassword = async (req, res, next) => {
+  const userId = req.user.id;
+  const { password } = req.body;
+  const hashedPassword = await bcrypt.hash(password, Number(process.env.SALT));
+  const user = await userModel.findByIdAndUpdate(
+    userId,
+    { password: hashedPassword },
+    { new: true },
+  );
+  if (!user) {
+    return res.status(404).json({
+      success: false,
+      message: "User not found",
+    });
+  }
+
+  return res.status(200).json({
+    success: true,
+    message: "Password updated successfully",
+  });
+};
+
+export const logout = async (req, res, next) => {
+  return res.status(200).json({
+    success: true,
+    message: "Logged out successfully",
   });
 };

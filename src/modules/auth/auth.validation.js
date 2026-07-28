@@ -40,3 +40,12 @@ export const login = joi.object({
     "any.required": "Password is required",
   }),
 });
+export const updatePassword = joi.object({
+  password: joi.string().min(8).max(16).required().messages({
+    "any.required": "Password is required",
+  }),
+
+  confirmPassword: joi.string().valid(joi.ref("password")).required().messages({
+    "any.only": "Confirm password must match password",
+  }),
+});
