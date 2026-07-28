@@ -109,9 +109,7 @@ export const getTask = async (req, res, next) => {
 
 export const updateTask = async (req, res, next) => {
   try {
-    const task = await taskModel.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
+    const task = await taskModel.findById(req.params.id).populate("project");
 
     if (!task) {
       return res.status(404).json({
@@ -119,6 +117,23 @@ export const updateTask = async (req, res, next) => {
         message: "Task not found",
       });
     }
+
+    const project = task.project;
+
+    const hasAccess =
+      project.owner.toString() === req.user.id ||
+      project.members.some((member) => member.toString() === req.user.id);
+
+    if (!hasAccess) {
+      return res.status(403).json({
+        success: false,
+        message: "You are not allowed to update this task",
+      });
+    }
+
+    Object.assign(task, req.body);
+
+    await task.save();
 
     return res.status(200).json({
       success: true,
@@ -129,10 +144,9 @@ export const updateTask = async (req, res, next) => {
     next(error);
   }
 };
-
 export const deleteTask = async (req, res, next) => {
   try {
-    const task = await taskModel.findByIdAndDelete(req.params.id);
+    const task = await taskModel.findById(req.params.id).populate("project");
 
     if (!task) {
       return res.status(404).json({
@@ -140,6 +154,21 @@ export const deleteTask = async (req, res, next) => {
         message: "Task not found",
       });
     }
+
+    const project = task.project;
+
+    const hasAccess =
+      project.owner.toString() === req.user.id ||
+      project.members.some((member) => member.toString() === req.user.id);
+
+    if (!hasAccess) {
+      return res.status(403).json({
+        success: false,
+        message: "You are not allowed to delete this task",
+      });
+    }
+
+    await taskModel.findByIdAndDelete(req.params.id);
 
     return res.status(200).json({
       success: true,
