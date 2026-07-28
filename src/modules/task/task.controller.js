@@ -39,22 +39,48 @@ export const createTask = async (req, res, next) => {
 
 export const getTasks = async (req, res, next) => {
   try {
+    const { page = 1, status, priority, assignee } = req.query;
+
     const filter = {
       project: req.params.projectId,
     };
 
-    if (req.query.status) filter.status = req.query.status;
-    if (req.query.priority) filter.priority = req.query.priority;
-    if (req.query.assignee) filter.assignee = req.query.assignee;
+    // Filters
+    if (status) {
+      filter.status = status;
+    }
+
+    if (priority) {
+      filter.priority = priority;
+    }
+
+    if (assignee) {
+      filter.assignee = assignee;
+    }
+
+    // Pagination
+    const limit = 10;
+    const skip = (page - 1) * limit;
 
     const tasks = await taskModel
       .find(filter)
-      .populate("creator", "username email")
-      .populate("assignee", "username email");
+      .skip(skip)
+      .limit(limit)
+      .populate("creator", "userName email")
+      .populate("assignee", "userName email");
+
+    const totalTasks = await taskModel.countDocuments(filter);
 
     return res.status(200).json({
       success: true,
-      data: tasks,
+      data: {
+        tasks,
+        pagination: {
+          currentPage: Number(page),
+          totalPages: Math.ceil(totalTasks / limit),
+          totalTasks,
+        },
+      },
     });
   } catch (error) {
     next(error);
