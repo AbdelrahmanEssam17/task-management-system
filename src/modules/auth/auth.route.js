@@ -23,5 +23,5 @@ router.patch(
   upload.single("image"),
   auth.uploadProfileImage,
 );
-
+router.post("/verify-email", auth.verifyEmail);
 export default router;
