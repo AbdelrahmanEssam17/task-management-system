@@ -1,15 +1,24 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { userModel } from "../../DB/model/user.model.js";
+import { customAlphabet } from "nanoid";
+import { emailEvent } from "../../utils/events/email.event.js";
 export const register = async (req, res, next) => {
   const { userName, email, password, phone, gender } = req.body;
   const hashedpassword = await bcrypt.hash(password, Number(process.env.SALT));
+  const otp = customAlphabet("0123456789", 6)();
   const user = await userModel.create({
     userName,
     email,
     password: hashedpassword,
     phone,
     gender,
+    otp,
+    otpExpires: new Date(Date.now() + 10 * 60 * 1000),
+  });
+  emailEvent.emit("sendConfirmationEmail", {
+    email,
+    otp,
   });
 
   return res.status(201).json({

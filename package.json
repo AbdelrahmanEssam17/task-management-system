@@ -32,6 +32,8 @@
     "mongoose": "^9.8.1",
     "morgan": "^1.11.0",
     "multer": "^2.2.0",
+    "nanoid": "^6.0.0",
+    "nodemailer": "^9.0.3",
     "uuid": "^14.0.1"
   },
   "devDependencies": {
