@@ -4,12 +4,12 @@ const gendertype = { male: "male", female: "female" };
 const Roletype = { Member: "Member", Admin: "Admin" };
 export const userschema = new Schema(
   {
-    username: {
+    userName: {
       type: String,
-      required: true,
       trim: true,
-      minlength: 3,
-      maxlength: 40,
+      required: true,
+      minLength: 3,
+      maxLength: 40,
     },
     password: {
       type: String,
@@ -41,4 +41,4 @@ export const userschema = new Schema(
   { timestamps: true },
 );
 
-export const usermodel = mongoose.models.User || model("User", userschema);
+export const userModel = mongoose.models.User || model("User", userschema);
