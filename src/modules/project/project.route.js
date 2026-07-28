@@ -21,5 +21,11 @@ router.patch(
   projectController.updateProject,
 );
 router.delete("/:id", verifyToken, projectController.deleteProject);
+router.post("/:id/members", verifyToken, projectController.addMember);
+router.delete(
+  "/:id/members/:userId",
+  verifyToken,
+  projectController.removeMember,
+);
 
 export default router;
