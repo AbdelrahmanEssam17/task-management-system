@@ -37,6 +37,10 @@ export const userschema = new Schema(
       enum: Object.values(Roletype),
       default: Roletype.Member,
     },
+    profileImage: {
+      type: String,
+      default: null,
+    },
   },
   { timestamps: true },
 );
