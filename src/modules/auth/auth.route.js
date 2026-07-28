@@ -5,6 +5,8 @@ import * as authValidation from "./auth.validation.js";
 import { auth as verifyToken } from "../../middleware/auth.middleware.js";
 const router = express.Router();
 import { emailExist } from "../../middleware/isExist.js";
+import upload from "../../middleware/multer.middleware.js";
+
 router.post(
   "/register",
   emailExist,
@@ -14,4 +16,12 @@ router.post(
 router.post("/login", validation(authValidation.login), auth.login);
 router.patch("/update-password", verifyToken, auth.updatePassword);
 router.post("/logout", verifyToken, auth.logout);
+
+router.patch(
+  "/profile-image",
+  verifyToken,
+  upload.single("image"),
+  auth.uploadProfileImage,
+);
+router.post("/verify-email", auth.verifyEmail);
 export default router;

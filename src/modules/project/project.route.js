@@ -4,7 +4,7 @@ import validation from "../../middleware/validation.js";
 import * as projectValidation from "./project.validation.js";
 import { auth as verifyToken } from "../../middleware/auth.middleware.js";
 const router = express.Router();
-
+import { Authorization } from "../../middleware/isAdmin.js";
 router.post(
   "/",
   verifyToken,
@@ -21,10 +21,16 @@ router.patch(
   projectController.updateProject,
 );
 router.delete("/:id", verifyToken, projectController.deleteProject);
-router.post("/:id/members", verifyToken, projectController.addMember);
+router.post(
+  "/:id/members",
+  verifyToken,
+  Authorization("Admin"),
+  projectController.addMember,
+);
 router.delete(
   "/:id/members/:userId",
   verifyToken,
+  Authorization("Admin"),
   projectController.removeMember,
 );
 
