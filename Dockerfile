@@ -1,11 +1,11 @@
-FROM node:22.15.0
+    FROM node:22.15.0
 
-WORKDIR /app
+    WORKDIR /app
 
-COPY package.json  .
+    COPY package.json  .
 
-RUN  npm i
+    RUN  npm i
 
-COPY . .
+    COPY . .
 
-CMD [ "npm","run",'dev' ]
+    CMD [ "npm","run",'dev' ]

@@ -9,6 +9,9 @@
     "seed": "node src/DB/seed.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
+  "jest": {
+    "testEnvironment": "node"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AbdelrahmanEssam17/task-management-system.git"

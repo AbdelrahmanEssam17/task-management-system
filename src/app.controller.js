@@ -23,7 +23,7 @@ const bootstrap = (app, express) => {
   app.use(helmet());
   app.use(cors());
   app.use(limiter);
-  app.use("/project", projectroute);
+  app.use("/projects", projectroute);
   app.use("/auth", userroute);
   app.use("/task", taskroute);
 
