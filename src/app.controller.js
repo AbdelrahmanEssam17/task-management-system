@@ -5,7 +5,7 @@ import helmet from "helmet";
 import dotenv from "dotenv";
 import { globalErrorhandling } from "./utils/response/error.response.js";
 import userroute from "./modules/auth/auth.route.js";
-
+import projectroute from "./modules/project/project.route.js";
 dotenv.config();
 
 const limiter = rateLimit({
@@ -22,6 +22,7 @@ const bootstrap = (app, express) => {
   app.use(helmet());
   app.use(cors());
   app.use(limiter);
+  app.use("/project", projectroute);
   app.use("/auth", userroute);
 
   app.all("/*splat", (req, res) => {
