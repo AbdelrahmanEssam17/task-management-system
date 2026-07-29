@@ -10,7 +10,7 @@ export const createTask = Joi.object({
   dueDate: Joi.date().required(),
 
   assignee: Joi.string().required(),
-});
+}).unknown(true);
 
 export const updateTask = Joi.object({
   title: Joi.string().min(3).max(100),
@@ -24,4 +24,4 @@ export const updateTask = Joi.object({
   dueDate: Joi.date(),
 
   assignee: Joi.string(),
-});
+}).unknown(true);
