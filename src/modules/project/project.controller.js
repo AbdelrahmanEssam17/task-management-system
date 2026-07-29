@@ -40,7 +40,7 @@ export const getProject = async (req, res, next) => {
     const project = await projectModel.findOne({
       _id: req.params.id,
       $or: [{ owner: req.user.id }, { members: req.user.id }],
-    });
+    }).populate("members", "userName email").populate("owner", "userName email");
 
     if (!project) {
       return res.status(404).json({
